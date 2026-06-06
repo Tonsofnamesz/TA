@@ -3,50 +3,67 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-/**
- * @property int $id
- * @property string $serial_number
- * @property int $device_type_id
- * @property int|null $supplier_id
- * @property string|null $manufacturer
- * @property string|null $model
- * @property string|null $version
- * @property numeric|null $ram_gb
- * @property int|null $storage_gb
- * @property string|null $invoice_number
- * @property numeric|null $purchase_price
- * @property string|null $capex_number
- * @property string|null $ship_date
- * @property string|null $warranty_start
- * @property string|null $warranty_end
- * @property string $status
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereCapexNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereDeviceTypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereInvoiceNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereManufacturer($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereModel($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset wherePurchasePrice($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereRamGb($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereSerialNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereShipDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereStorageGb($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereSupplierId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereVersion($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereWarrantyEnd($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereWarrantyStart($value)
- * @mixin \Eloquent
- */
 class Asset extends Model
 {
-    //
+    use HasFactory;
+
+    protected $fillable = [
+        'serial_number',
+        'device_type_id',
+        'supplier_id',
+        'manufacturer',
+        'model',
+        'version',
+        'ram_gb',
+        'storage_gb',
+        'invoice_number',
+        'purchase_price',
+        'capex_number',
+        'ship_date',
+        'warranty_start',
+        'warranty_end',
+        'status',
+    ];
+
+    protected $appends = [
+        'warranty_status',
+    ];
+
+    public function deviceType()
+    {
+        return $this->belongsTo(DeviceType::class);
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
+    }
+
+    public function assignments()
+    {
+        return $this->hasMany(AssetAssignment::class);
+    }
+
+    public function getWarrantyStatusAttribute()
+    {
+        if (empty($this->warranty_end)) {
+            return null;
+        }
+
+        $end = \Carbon\Carbon::parse($this->warranty_end);
+        $days = now()->diffInDays($end, false);
+
+        return match (true) {
+            $days < 0 => 'expired',
+            $days <= 90 => 'expiring',
+            default => 'active',
+        };
+    }
+    public function currentAssignment()
+{
+    return $this->hasOne(AssetAssignment::class)
+        ->whereNull('end_date');
+}
 }

@@ -15,9 +15,7 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
 
-            $table->foreignId('user_id')
-                ->constrained()
-                ->cascadeOnDelete();
+            $table->string('assigned_to')->nullable();
 
             $table->foreignId('site_id')
                 ->nullable()
