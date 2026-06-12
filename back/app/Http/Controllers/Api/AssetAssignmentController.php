@@ -90,15 +90,9 @@ class AssetAssignmentController extends Controller
         AssetAssignment $assetAssignment
     ) {
         $validated = $request->validate([
-            'asset_id' => 'required|exists:assets,id',
-            'assigned_to' => 'nullable|string|max:255',
-            'site_id' => 'nullable|exists:sites,id',
-            'department_id' => 'nullable|exists:departments,id',
-            'computer_name' => 'nullable|string|max:255',
-            'fqdn' => 'nullable|string|max:255',
-            'notes' => 'nullable|string',
             'start_date' => 'required|date',
             'end_date' => 'nullable|date',
+            'notes' => 'nullable|string',
         ]);
 
         $assetAssignment->update($validated);

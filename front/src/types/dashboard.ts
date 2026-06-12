@@ -16,9 +16,20 @@ export interface WarrantySummary {
 
 export interface ExpiringAsset {
     id: number;
+
     serial_number: string;
+
     manufacturer: string;
+
     model: string;
-    warranty_end: string;
+
+    warranty_start: string | null;
+
+    warranty_end: string | null;
+
     status: string;
+
+    assigned_to: string | null;
+
+    device_age: string | null;
 }

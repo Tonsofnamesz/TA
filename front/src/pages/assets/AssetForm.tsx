@@ -35,6 +35,7 @@ export default function AssetForm({
         ship_date: "",
         warranty_start: "",
         warranty_end: "",
+        country: "",
         status: "available",
     });
 
@@ -98,6 +99,9 @@ export default function AssetForm({
 
             warranty_end:
                 initialData.warranty_end ?? "",
+
+            country:
+                initialData.country ?? "",
 
             status:
                 initialData.status ?? "available",
@@ -229,6 +233,7 @@ export default function AssetForm({
                     />
                 </div>
 
+
                 <div>
                     <label className="text-sm">Warranty Start</label>
                     <input
@@ -250,6 +255,18 @@ export default function AssetForm({
                         className="border p-2 w-full"
                     />
                 </div>
+            </div>
+
+            {/* Country */}
+            <div>
+                <label className="text-sm">Country</label>
+                <input
+                    name="country"
+                    placeholder="Country"
+                    value={form.country}
+                    onChange={handleChange}
+                    className="border p-2 w-full"
+                />
             </div>
 
             {/* Status */}

@@ -67,6 +67,8 @@ class AssetController extends Controller
 
             'warranty_end' => 'nullable|date',
 
+            'country' => 'nullable|string|max:255',
+
             'status' => [
                 'required',
                 'in:available,assigned,broken,lost,disposed'
@@ -124,6 +126,8 @@ class AssetController extends Controller
             'warranty_start' => 'nullable|date',
 
             'warranty_end' => 'nullable|date',
+
+            'country' => 'nullable|string|max:255',
 
             'status' => [
                 'required',

@@ -193,38 +193,45 @@ export default function AssetsPage() {
             </div>
 
             <div className="bg-white rounded shadow overflow-x-auto">
+
+                ```
+                <div className="flex justify-between items-center p-4 border-b">
+                    <p className="text-gray-600">
+                        Showing {filteredAssets.length} assets
+                    </p>
+
+                    <button
+                        onClick={() => setShowFull(!showFull)}
+                        className="bg-slate-800 text-white px-4 py-2 rounded"
+                    >
+                        {showFull
+                            ? "Simple View"
+                            : "Full Details"}
+                    </button>
+                </div>
+
                 <table className="w-full text-sm">
-                    <tr>
-                        <th className="p-3 text-left">Serial</th>
-                        <th className="p-3 text-left">Model</th>
-                        <th className="p-3 text-left">Status</th>
+                    <thead className="bg-gray-100">
+                        <tr>
+                            <th className="p-3 text-left">Serial</th>
+                            <th className="p-3 text-left">Model</th>
+                            <th className="p-3 text-left">Country</th>
+                            <th className="p-3 text-left">Status</th>
 
-                        {showFull && (
-                            <>
-                                <th className="p-3 text-left">RAM</th>
-                                <th className="p-3 text-left">Storage</th>
-                                <th className="p-3 text-left">Assigned To</th>
-                            </>
-                        )}
+                            {showFull && (
+                                <>
+                                    <th className="p-3 text-left">RAM</th>
+                                    <th className="p-3 text-left">Storage</th>
+                                    <th className="p-3 text-left">Assigned To</th>
+                                </>
+                            )}
 
-                        <th className="p-3 text-left">Warranty</th>
-                        <th className="p-3 text-left">Actions</th>
-                    </tr>
-
-                    <div className="flex justify-between items-center mb-3">
-                        <p className="text-gray-600">
-                            Showing {filteredAssets.length} assets
-                        </p>
-
-                        <button
-                            onClick={() => setShowFull(!showFull)}
-                            className="bg-slate-800 text-white px-4 py-2 rounded"
-                        >
-                            {showFull
-                                ? "Simple View"
-                                : "Full Details"}
-                        </button>
-                    </div>
+                            <th className="p-3 text-left">Warranty Start</th>
+                            <th className="p-3 text-left">Warranty End</th>
+                            <th className="p-3 text-left">Warranty Status</th>
+                            <th className="p-3 text-left">Actions</th>
+                        </tr>
+                    </thead>
 
                     <tbody>
                         {Array.isArray(filteredAssets) &&
@@ -233,32 +240,53 @@ export default function AssetsPage() {
                                     key={asset.id}
                                     className="border-t hover:bg-slate-50 transition"
                                 >
-                                    <td className="p-3">{asset.serial_number}</td>
-                                    <td className="p-3">{asset.model ?? "-"}</td>
-                                    <td className="p-3">{asset.status}</td>
+                                    <td className="p-3">
+                                        {asset.serial_number}
+                                    </td>
+
+                                    <td className="p-3">
+                                        {asset.model ?? "-"}
+                                    </td>
+
+                                    <td className="p-3">
+                                        {asset.country ?? "-"}
+                                    </td>
+
+                                    <td className="p-3">
+                                        {asset.status}
+                                    </td>
 
                                     {showFull && (
                                         <>
-                                            <td className="p-3">{asset.ram_gb ?? "-"}</td>
-                                            <td className="p-3">{asset.storage_gb ?? "-"}</td>
+                                            <td className="p-3">
+                                                {asset.ram_gb ?? "-"}
+                                            </td>
+
+                                            <td className="p-3">
+                                                {asset.storage_gb ?? "-"}
+                                            </td>
+
                                             <td className="p-3">
                                                 {asset.assignments?.[0]?.assigned_to ?? "-"}
                                             </td>
                                         </>
                                     )}
+
                                     <td className="p-3">
-                                        <span className="px-2 py-1 bg-gray-200 rounded text-xs">
-                                            {asset.status}
-                                        </span>
+                                        {asset.warranty_start ?? "-"}
+                                    </td>
+
+                                    <td className="p-3">
+                                        {asset.warranty_end ?? "-"}
                                     </td>
 
                                     <td className="p-3">
                                         <span
                                             className={`px-2 py-1 rounded text-xs ${asset.warranty_status === "expired"
-                                                ? "bg-red-200 text-red-700"
-                                                : asset.warranty_status === "expiring"
-                                                    ? "bg-yellow-200 text-yellow-700"
-                                                    : "bg-green-200 text-green-700"
+                                                    ? "bg-red-200 text-red-700"
+                                                    : asset.warranty_status === "expiring"
+                                                        ? "bg-yellow-200 text-yellow-700"
+                                                        : "bg-green-200 text-green-700"
                                                 }`}
                                         >
                                             {asset.warranty_status ?? "N/A"}
@@ -267,7 +295,9 @@ export default function AssetsPage() {
 
                                     <td className="p-3 space-x-2">
                                         <button
-                                            onClick={() => navigate(`/assets/${asset.id}`)}
+                                            onClick={() =>
+                                                navigate(`/assets/${asset.id}`)
+                                            }
                                             className="text-blue-600 hover:underline"
                                         >
                                             View
@@ -283,7 +313,9 @@ export default function AssetsPage() {
                                         </button>
 
                                         <button
-                                            onClick={() => handleDelete(asset.id)}
+                                            onClick={() =>
+                                                handleDelete(asset.id)
+                                            }
                                             className="text-red-600 hover:underline"
                                         >
                                             Delete
@@ -293,7 +325,10 @@ export default function AssetsPage() {
                             ))}
                     </tbody>
                 </table>
+                ```
+
             </div>
+
         </AppLayout>
     );
 }

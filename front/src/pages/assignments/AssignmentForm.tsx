@@ -153,151 +153,143 @@ export default function AssignmentForm({
             className="bg-white p-6 rounded-lg shadow space-y-5"
         >
             {/* Asset */}
-            <div>
-                <label className="block text-sm font-medium mb-1">
-                    Asset
-                </label>
+            {!isEdit && (
+                <>
+                    {/* Asset */}
+                    <div>
+                        <label className="block text-sm font-medium mb-1">
+                            Asset
+                        </label>
 
-                <select
-                    name="asset_id"
-                    value={form.asset_id}
-                    onChange={handleChange}
-                    className="border rounded p-2 w-full"
-                    required
-                >
-                    <option value="">
-                        Select Asset
-                    </option>
-
-                    {assets.map((asset) => (
-                        <option
-                            key={asset.id}
-                            value={asset.id}
+                        <select
+                            name="asset_id"
+                            value={form.asset_id}
+                            onChange={handleChange}
+                            className="border rounded p-2 w-full"
+                            required
                         >
-                            {asset.serial_number}
-                            {" - "}
-                            {asset.model ??
-                                "No Model"}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            {/* Assigned To */}
-            <div>
-                <label className="block text-sm font-medium mb-1">
-                    Assigned To
-                </label>
-
-                <input
-                    type="text"
-                    name="assigned_to"
-                    value={form.assigned_to}
-                    onChange={handleChange}
-                    className="border rounded p-2 w-full"
-                    placeholder="Employee Name"
-                />
-            </div>
-
-            {/* Site + Department */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label className="block text-sm font-medium mb-1">
-                        Site
-                    </label>
-
-                    <select
-                        name="site_id"
-                        value={form.site_id}
-                        onChange={handleChange}
-                        className="border rounded p-2 w-full"
-                    >
-                        <option value="">
-                            Select Site
-                        </option>
-
-                        {sites.map((site) => (
-                            <option
-                                key={site.id}
-                                value={site.id}
-                            >
-                                {site.site_name}
+                            <option value="">
+                                Select Asset
                             </option>
-                        ))}
-                    </select>
-                </div>
 
-                <div>
-                    <label className="block text-sm font-medium mb-1">
-                        Department
-                    </label>
-
-                    <select
-                        name="department_id"
-                        value={
-                            form.department_id
-                        }
-                        onChange={handleChange}
-                        className="border rounded p-2 w-full"
-                    >
-                        <option value="">
-                            Select Department
-                        </option>
-
-                        {departments.map(
-                            (department) => (
+                            {assets.map((asset) => (
                                 <option
-                                    key={
-                                        department.id
-                                    }
-                                    value={
-                                        department.id
-                                    }
+                                    key={asset.id}
+                                    value={asset.id}
                                 >
-                                    {
-                                        department.name
-                                    }
+                                    {asset.serial_number}
+                                    {" - "}
+                                    {asset.model ?? "No Model"}
                                 </option>
-                            )
-                        )}
-                    </select>
-                </div>
-            </div>
+                            ))}
+                        </select>
+                    </div>
 
-            {/* Computer Name + FQDN */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label className="block text-sm font-medium mb-1">
-                        Computer Name
-                    </label>
+                    {/* Assigned To */}
+                    <div>
+                        <label className="block text-sm font-medium mb-1">
+                            Assigned To
+                        </label>
 
-                    <input
-                        type="text"
-                        name="computer_name"
-                        value={
-                            form.computer_name
-                        }
-                        onChange={handleChange}
-                        className="border rounded p-2 w-full"
-                        placeholder="FIN-PC-001"
-                    />
-                </div>
+                        <input
+                            type="text"
+                            name="assigned_to"
+                            value={form.assigned_to}
+                            onChange={handleChange}
+                            className="border rounded p-2 w-full"
+                            placeholder="Employee Name"
+                        />
+                    </div>
 
-                <div>
-                    <label className="block text-sm font-medium mb-1">
-                        FQDN
-                    </label>
+                    {/* Site + Department */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium mb-1">
+                                Site
+                            </label>
 
-                    <input
-                        type="text"
-                        name="fqdn"
-                        value={form.fqdn}
-                        onChange={handleChange}
-                        className="border rounded p-2 w-full"
-                        placeholder="fin-pc-001.company.local"
-                    />
-                </div>
-            </div>
+                            <select
+                                name="site_id"
+                                value={form.site_id}
+                                onChange={handleChange}
+                                className="border rounded p-2 w-full"
+                            >
+                                <option value="">
+                                    Select Site
+                                </option>
+
+                                {sites.map((site) => (
+                                    <option
+                                        key={site.id}
+                                        value={site.id}
+                                    >
+                                        {site.site_name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium mb-1">
+                                Department
+                            </label>
+
+                            <select
+                                name="department_id"
+                                value={form.department_id}
+                                onChange={handleChange}
+                                className="border rounded p-2 w-full"
+                            >
+                                <option value="">
+                                    Select Department
+                                </option>
+
+                                {departments.map((department) => (
+                                    <option
+                                        key={department.id}
+                                        value={department.id}
+                                    >
+                                        {department.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+
+                    {/* Computer Name + FQDN */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium mb-1">
+                                Computer Name
+                            </label>
+
+                            <input
+                                type="text"
+                                name="computer_name"
+                                value={form.computer_name}
+                                onChange={handleChange}
+                                className="border rounded p-2 w-full"
+                                placeholder="FIN-PC-001"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium mb-1">
+                                FQDN
+                            </label>
+
+                            <input
+                                type="text"
+                                name="fqdn"
+                                value={form.fqdn}
+                                onChange={handleChange}
+                                className="border rounded p-2 w-full"
+                                placeholder="fin-pc-001.company.local"
+                            />
+                        </div>
+                    </div>
+                </>
+            )}
 
             {/* Notes */}
             <div>

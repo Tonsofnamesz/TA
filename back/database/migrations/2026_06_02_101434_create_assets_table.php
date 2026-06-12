@@ -44,6 +44,8 @@ return new class extends Migration
 
             $table->date('warranty_end')->nullable();
 
+            $table->string('country')->nullable();
+
             $table->enum('status', [
                 'available',
                 'assigned',

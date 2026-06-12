@@ -86,14 +86,18 @@ class DashboardController extends Controller
 
     public function expiringAssets()
     {
-        return Asset::select(
-            'id',
-            'serial_number',
-            'manufacturer',
-            'model',
-            'warranty_end',
-            'status'
-        )
+        return Asset::with([
+            'currentAssignment'
+        ])
+            ->select(
+                'id',
+                'serial_number',
+                'manufacturer',
+                'model',
+                'warranty_start',
+                'warranty_end',
+                'status'
+            )
             ->whereBetween(
                 'warranty_end',
                 [
@@ -102,7 +106,41 @@ class DashboardController extends Controller
                 ]
             )
             ->orderBy('warranty_end')
-            ->get();
+            ->get()
+            ->map(function ($asset) {
+
+                $deviceAge = null;
+
+                if ($asset->warranty_start) {
+                    $deviceAge =
+                        Carbon::parse(
+                            $asset->warranty_start
+                        )->diffForHumans(
+                            now(),
+                            [
+                                'parts' => 2,
+                                'short' => true,
+                                'syntax' => Carbon::DIFF_ABSOLUTE
+                            ]
+                        );
+                }
+
+                return [
+                    'id' => $asset->id,
+                    'serial_number' => $asset->serial_number,
+                    'manufacturer' => $asset->manufacturer,
+                    'model' => $asset->model,
+                    'status' => $asset->status,
+                    'warranty_start' => $asset->warranty_start,
+                    'warranty_end' => $asset->warranty_end,
+
+                    'assigned_to' =>
+                    $asset->currentAssignment?->assigned_to,
+
+                    'device_age' =>
+                    $deviceAge,
+                ];
+            });
     }
 
     public function departments()

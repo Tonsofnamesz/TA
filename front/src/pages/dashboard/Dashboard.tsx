@@ -207,6 +207,14 @@ export default function Dashboard() {
                                 </th>
 
                                 <th className="text-left px-4 py-3 font-semibold text-slate-700">
+                                    Assigned To
+                                </th>
+
+                                <th className="text-left px-4 py-3 font-semibold text-slate-700">
+                                    Device Age
+                                </th>
+
+                                <th className="text-left px-4 py-3 font-semibold text-slate-700">
                                     Warranty End
                                 </th>
                             </tr>
@@ -216,7 +224,7 @@ export default function Dashboard() {
                             {expiringAssets.length === 0 ? (
                                 <tr>
                                     <td
-                                        colSpan={4}
+                                        colSpan={6}
                                         className="text-center py-8 text-gray-500"
                                     >
                                         No assets approaching warranty expiration.
@@ -230,25 +238,27 @@ export default function Dashboard() {
                                             className="border-t hover:bg-slate-50"
                                         >
                                             <td className="px-4 py-3">
-                                                {
-                                                    asset.serial_number
-                                                }
+                                                {asset.serial_number}
                                             </td>
 
                                             <td className="px-4 py-3">
-                                                {
-                                                    asset.manufacturer
-                                                }
+                                                {asset.manufacturer ?? "-"}
                                             </td>
 
                                             <td className="px-4 py-3">
-                                                {asset.model}
+                                                {asset.model ?? "-"}
+                                            </td>
+
+                                            <td className="px-4 py-3">
+                                                {asset.assigned_to ?? "-"}
+                                            </td>
+
+                                            <td className="px-4 py-3">
+                                                {asset.device_age ?? "-"}
                                             </td>
 
                                             <td className="px-4 py-3 text-red-600 font-medium">
-                                                {
-                                                    asset.warranty_end
-                                                }
+                                                {asset.warranty_end}
                                             </td>
                                         </tr>
                                     )

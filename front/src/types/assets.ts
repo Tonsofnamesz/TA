@@ -21,6 +21,8 @@ export interface Asset {
   warranty_start?: string | null;
   warranty_end?: string | null;
 
+  country?: string;
+
   status: "available" | "assigned" | "broken" | "lost" | "disposed";
 
   warranty_status?: "active" | "expiring" | "expired" | null;

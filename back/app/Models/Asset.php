@@ -24,6 +24,7 @@ class Asset extends Model
         'ship_date',
         'warranty_start',
         'warranty_end',
+        'country',
         'status',
     ];
 
@@ -62,8 +63,8 @@ class Asset extends Model
         };
     }
     public function currentAssignment()
-{
-    return $this->hasOne(AssetAssignment::class)
-        ->whereNull('end_date');
-}
+    {
+        return $this->hasOne(AssetAssignment::class)
+            ->whereNull('end_date');
+    }
 }
