@@ -11,6 +11,7 @@ import AssignmentList from "./pages/assignments/AssignmentList";
 import AssignmentCreate from "./pages/assignments/AssignmentCreate";
 import AssignmentDetails from "./pages/assignments/AssignmentDetails";
 import AssignmentEdit from "./pages/assignments/AssignmentEdit";
+import ReportsPage from "./pages/reports/ReportsPage";
 
 function App() {
   return (
@@ -19,6 +20,15 @@ function App() {
         <Route
           path="/"
           element={<Login />}
+        />
+
+        <Route
+          path="/reports"
+          element={
+            <ProtectedRoute>
+              <ReportsPage />
+            </ProtectedRoute>
+          }
         />
 
         <Route
@@ -98,6 +108,7 @@ function App() {
           element={<ProtectedRoute><Dashboard /></ProtectedRoute>}
         />
       </Routes>
+
     </BrowserRouter>
   );
 }

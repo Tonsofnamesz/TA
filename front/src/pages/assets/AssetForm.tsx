@@ -54,6 +54,7 @@ export default function AssetForm({
     }, []);
 
     useEffect(() => {
+        console.log("AssetForm initialData:", initialData);
         if (!initialData) return;
 
         setForm({
@@ -200,6 +201,54 @@ export default function AssetForm({
                     onChange={handleChange}
                     className="border p-2"
                 />
+            </div>
+
+            {/* Financial Info */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                <div>
+                    <label className="text-sm">
+                        Invoice Number
+                    </label>
+
+                    <input
+                        name="invoice_number"
+                        value={form.invoice_number}
+                        onChange={handleChange}
+                        className="border p-2 w-full"
+                        placeholder="INV-001"
+                    />
+                </div>
+
+                <div>
+                    <label className="text-sm">
+                        Purchase Price
+                    </label>
+
+                    <input
+                        type="number"
+                        name="purchase_price"
+                        value={form.purchase_price}
+                        onChange={handleChange}
+                        className="border p-2 w-full"
+                        placeholder="10000000"
+                    />
+                </div>
+
+                <div>
+                    <label className="text-sm">
+                        CAPEX Number
+                    </label>
+
+                    <input
+                        name="capex_number"
+                        value={form.capex_number}
+                        onChange={handleChange}
+                        className="border p-2 w-full"
+                        placeholder="CAPEX-2026-001"
+                    />
+                </div>
+
             </div>
 
             {/* Specs */}

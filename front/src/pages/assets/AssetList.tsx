@@ -3,6 +3,7 @@ import AppLayout from "../../components/layout/AppLayout";
 import { getAssets } from "../../api/assets";
 import { useNavigate } from "react-router-dom";
 import { deleteAsset } from "../../api/assets";
+import Swal from "sweetalert2";
 
 
 export default function AssetsPage() {
@@ -27,20 +28,39 @@ export default function AssetsPage() {
         setAssets(data);
     };
     const handleDelete = async (id: number) => {
-        const confirmed = window.confirm(
-            "Delete this asset?"
-        );
+        const result = await Swal.fire({
+            title: "Delete Asset?",
+            text: "This action cannot be undone.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Delete",
+            cancelButtonText: "Cancel",
+        });
 
-        if (!confirmed) return;
+        if (!result.isConfirmed) return;
 
         try {
             await deleteAsset(id);
 
+            await Swal.fire({
+                title: "Deleted",
+                text: "Asset deleted successfully.",
+                icon: "success",
+            });
+
             await load();
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
 
-            alert("Failed to delete asset");
+            const message =
+                error?.response?.data?.message ||
+                "Failed to delete asset";
+
+            await Swal.fire({
+                title: "Error",
+                text: message,
+                icon: "error",
+            });
         }
     };
 
@@ -223,6 +243,9 @@ export default function AssetsPage() {
                                     <th className="p-3 text-left">RAM</th>
                                     <th className="p-3 text-left">Storage</th>
                                     <th className="p-3 text-left">Assigned To</th>
+                                    <th className="p-3 text-left">Invoice</th>
+                                    <th className="p-3 text-left">Purchase Price</th>
+                                    <th className="p-3 text-left">CAPEX</th>
                                 </>
                             )}
 
@@ -269,6 +292,21 @@ export default function AssetsPage() {
                                             <td className="p-3">
                                                 {asset.assignments?.[0]?.assigned_to ?? "-"}
                                             </td>
+                                            <td className="p-3">
+                                                {asset.invoice_number ?? "-"}
+                                            </td>
+
+                                            <td className="p-3">
+                                                {asset.purchase_price
+                                                    ? Number(asset.purchase_price)
+                                                        .toLocaleString()
+                                                    : "-"
+                                                }
+                                            </td>
+
+                                            <td className="p-3">
+                                                {asset.capex_number ?? "-"}
+                                            </td>
                                         </>
                                     )}
 
@@ -283,10 +321,10 @@ export default function AssetsPage() {
                                     <td className="p-3">
                                         <span
                                             className={`px-2 py-1 rounded text-xs ${asset.warranty_status === "expired"
-                                                    ? "bg-red-200 text-red-700"
-                                                    : asset.warranty_status === "expiring"
-                                                        ? "bg-yellow-200 text-yellow-700"
-                                                        : "bg-green-200 text-green-700"
+                                                ? "bg-red-200 text-red-700"
+                                                : asset.warranty_status === "expiring"
+                                                    ? "bg-yellow-200 text-yellow-700"
+                                                    : "bg-green-200 text-green-700"
                                                 }`}
                                         >
                                             {asset.warranty_status ?? "N/A"}

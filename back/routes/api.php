@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\DeviceTypeController;
 use App\Http\Controllers\Api\AssetController;
 use App\Http\Controllers\Api\AssetAssignmentController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\ReportController;
 
 Route::post('/register', [RegisteredUserController::class, 'store']);
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
@@ -68,5 +69,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get(
         '/dashboard/departments',
         [DashboardController::class, 'departments']
+    );
+    Route::get(
+        '/reports/warranty',
+        [ReportController::class, 'warrantyReport']
+    );
+
+    Route::get(
+        '/reports/assets',
+        [ReportController::class, 'assetReport']
     );
 });

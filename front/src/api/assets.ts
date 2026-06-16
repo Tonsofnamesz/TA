@@ -7,7 +7,8 @@ export const getAssets = async () => {
 
 export const getAsset = async (id: number) => {
   const res = await api.get(`/assets/${id}`);
-  return res.data.data;
+
+  return res.data;
 };
 
 export const createAsset = async (data: any) => {
@@ -28,6 +29,6 @@ export const updateAsset = async (
 };
 
 export const deleteAsset = async (id: number) => {
-    const res = await api.delete(`/assets/${id}`);
-    return res.data;
+  const res = await api.delete(`/assets/${id}`);
+  return res.data;
 };

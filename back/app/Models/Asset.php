@@ -65,6 +65,12 @@ class Asset extends Model
     public function currentAssignment()
     {
         return $this->hasOne(AssetAssignment::class)
-            ->whereNull('end_date');
+            ->latestOfMany();
+    }
+    public function latestAssignment()
+    {
+        return $this->hasOne(
+            AssetAssignment::class
+        )->latestOfMany();
     }
 }

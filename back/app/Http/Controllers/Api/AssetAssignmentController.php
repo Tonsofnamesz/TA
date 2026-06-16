@@ -112,9 +112,12 @@ class AssetAssignmentController extends Controller
     public function destroy(
         AssetAssignment $assetAssignment
     ) {
-        $assetAssignment->asset?->update([
-            'status' => 'available'
-        ]);
+        if ($assetAssignment->end_date === null) {
+            return response()->json([
+                'message' =>
+                'Active assignments cannot be deleted. Return the asset first.'
+            ], 422);
+        }
 
         $assetAssignment->delete();
 

@@ -145,6 +145,20 @@ class AssetController extends Controller
      */
     public function destroy(Asset $asset)
     {
+        $asset->load('currentAssignment');
+
+        if ($asset->currentAssignment) {
+
+            $assignedTo =
+                $asset->currentAssignment->assigned_to
+                ?? 'Unknown User';
+
+            return response()->json([
+                'message' =>
+                "Asset cannot be deleted because it is currently assigned to {$assignedTo}."
+            ], 422);
+        }
+
         $asset->delete();
 
         return response()->json([

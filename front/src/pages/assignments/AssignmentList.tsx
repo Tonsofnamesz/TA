@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import AppLayout from "../../components/layout/AppLayout";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 import {
     getAssignments,
     returnAssignment,
+    deleteAssignment,
 } from "../../api/assignments";
 
 export default function AssignmentList() {
@@ -36,22 +38,87 @@ export default function AssignmentList() {
     const handleReturn = async (
         id: number
     ) => {
-        const confirmed = window.confirm(
-            "Return this asset?"
-        );
 
-        if (!confirmed) return;
+        const result =
+            await Swal.fire({
+                title: "Return Asset?",
+                text: "This asset will become available again.",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Return",
+                cancelButtonText: "Cancel",
+            });
+
+        if (!result.isConfirmed)
+            return;
 
         try {
+
             await returnAssignment(id);
 
-            await loadAssignments();
-        } catch (error) {
-            console.error(error);
+            await Swal.fire({
+                title: "Success",
+                text: "Asset returned successfully.",
+                icon: "success",
+            });
 
-            alert(
-                "Failed to return asset"
-            );
+            await loadAssignments();
+
+        } catch (error: any) {
+
+            Swal.fire({
+                title: "Error",
+                text:
+                    error?.response?.data?.message ||
+                    "Failed to return asset",
+                icon: "error",
+            });
+        }
+    };
+
+    const handleDelete = async (
+        id: number
+    ) => {
+
+        const result =
+            await Swal.fire({
+                title:
+                    "Delete Assignment?",
+                text:
+                    "This action cannot be undone.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText:
+                    "Delete",
+                cancelButtonText:
+                    "Cancel",
+            });
+
+        if (!result.isConfirmed)
+            return;
+
+        try {
+
+            await deleteAssignment(id);
+
+            await Swal.fire({
+                title: "Deleted",
+                text:
+                    "Assignment deleted successfully.",
+                icon: "success",
+            });
+
+            await loadAssignments();
+
+        } catch (error: any) {
+
+            Swal.fire({
+                title: "Cannot Delete",
+                text:
+                    error?.response?.data?.message ||
+                    "Failed to delete assignment",
+                icon: "error",
+            });
         }
     };
 
@@ -131,9 +198,7 @@ export default function AssignmentList() {
                         {assignments.map(
                             (assignment: any) => {
                                 const isReturned =
-                                    assignment.asset
-                                        ?.status ===
-                                    "available";
+                                    !!assignment.end_date;
 
                                 return (
                                     <tr
@@ -186,8 +251,8 @@ export default function AssignmentList() {
                                         <td className="p-3">
                                             <span
                                                 className={`px-2 py-1 rounded text-xs ${isReturned
-                                                        ? "bg-gray-200 text-gray-700"
-                                                        : "bg-green-100 text-green-700"
+                                                    ? "bg-gray-200 text-gray-700"
+                                                    : "bg-green-100 text-green-700"
                                                     }`}
                                             >
                                                 {isReturned
@@ -204,9 +269,9 @@ export default function AssignmentList() {
                                                     )
                                                 }
                                                 className="
-                                                    text-blue-600
-                                                    hover:underline
-                                                "
+            text-blue-600
+            hover:underline
+        "
                                             >
                                                 View
                                             </button>
@@ -218,9 +283,9 @@ export default function AssignmentList() {
                                                     )
                                                 }
                                                 className="
-                                                    text-green-600
-                                                    hover:underline
-                                                "
+            text-green-600
+            hover:underline
+        "
                                             >
                                                 Edit
                                             </button>
@@ -233,11 +298,27 @@ export default function AssignmentList() {
                                                         )
                                                     }
                                                     className="
-                                                        text-orange-600
-                                                        hover:underline
-                                                    "
+                text-orange-600
+                hover:underline
+            "
                                                 >
                                                     Return
+                                                </button>
+                                            )}
+
+                                            {isReturned && (
+                                                <button
+                                                    onClick={() =>
+                                                        handleDelete(
+                                                            assignment.id
+                                                        )
+                                                    }
+                                                    className="
+            text-red-600
+            hover:underline
+        "
+                                                >
+                                                    Delete
                                                 </button>
                                             )}
                                         </td>
