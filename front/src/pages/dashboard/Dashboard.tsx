@@ -254,7 +254,9 @@ export default function Dashboard() {
                                             </td>
 
                                             <td className="px-4 py-3">
-                                                {asset.device_age ?? "-"}
+                                                {asset.device_age
+                                                    ? `${asset.device_age} years`
+                                                    : "-"}
                                             </td>
 
                                             <td className="px-4 py-3 text-red-600 font-medium">

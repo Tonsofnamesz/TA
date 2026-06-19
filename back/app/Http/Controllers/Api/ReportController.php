@@ -22,6 +22,9 @@ class ReportController extends Controller
             ->select(
                 'id',
                 'serial_number',
+                'manufacturer',
+                'model',
+                'ship_date',
                 'warranty_start',
                 'warranty_end'
             )
@@ -33,15 +36,36 @@ class ReportController extends Controller
             ->map(function ($asset) {
 
                 return [
+                    'id' => $asset->id,
+
                     'serial_number' => $asset->serial_number,
 
-                    'warranty_start' => $asset->warranty_start,
+                    'computer_name' =>
+                    $asset->latestAssignment?->computer_name ?? '-',
 
-                    'warranty_end' => $asset->warranty_end,
+                    'manufacturer' =>
+                    $asset->manufacturer,
+
+                    'model' =>
+                    $asset->model,
+
+                    'warranty_start' =>
+                    $asset->warranty_start,
+
+                    'warranty_end' =>
+                    $asset->warranty_end,
 
                     'latest_user' =>
-                    $asset->latestAssignment?->assigned_to
-                        ?? '-',
+                    $asset->latestAssignment?->assigned_to ?? '-',
+
+                    'device_age' =>
+                    $asset->ship_date
+                        ? round(
+                            \Carbon\Carbon::parse($asset->ship_date)
+                                ->floatDiffInYears(now()),
+                            1
+                        )
+                        : null,
                 ];
             });
     }
@@ -63,6 +87,8 @@ class ReportController extends Controller
             ->select(
                 'id',
                 'serial_number',
+                'manufacturer',
+                'model',
                 'ship_date',
                 'purchase_price',
                 'invoice_number',
@@ -76,8 +102,19 @@ class ReportController extends Controller
             ->map(function ($asset) {
 
                 return [
+                    'id' => $asset->id,
+
                     'serial_number' =>
                     $asset->serial_number,
+
+                    'computer_name' =>
+                    $asset->latestAssignment?->computer_name ?? '-',
+
+                    'manufacturer' =>
+                    $asset->manufacturer,
+
+                    'model' =>
+                    $asset->model,
 
                     'activation_date' =>
                     $asset->ship_date,
@@ -92,8 +129,7 @@ class ReportController extends Controller
                     $asset->capex_number,
 
                     'latest_user' =>
-                    $asset->latestAssignment?->assigned_to
-                        ?? '-',
+                    $asset->latestAssignment?->assigned_to ?? '-',
                 ];
             });
     }

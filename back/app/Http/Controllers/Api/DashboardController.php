@@ -112,17 +112,14 @@ class DashboardController extends Controller
                 $deviceAge = null;
 
                 if ($asset->warranty_start) {
-                    $deviceAge =
+
+                    $years =
                         Carbon::parse(
                             $asset->warranty_start
-                        )->diffForHumans(
-                            now(),
-                            [
-                                'parts' => 2,
-                                'short' => true,
-                                'syntax' => Carbon::DIFF_ABSOLUTE
-                            ]
-                        );
+                        )->floatDiffInYears(now());
+
+                    $deviceAge =
+                        round($years, 1);
                 }
 
                 return [

@@ -176,10 +176,6 @@ export default function AssetDetail() {
               <span className="text-gray-500">Price:</span>{" "}
               {asset.purchase_price ?? "-"}
             </p>
-            <p>
-              <span className="text-gray-500">Ship Date:</span>{" "}
-              {asset.ship_date ?? "-"}
-            </p>
           </div>
         </div>
 
