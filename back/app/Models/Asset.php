@@ -73,4 +73,11 @@ class Asset extends Model
             AssetAssignment::class
         )->latestOfMany();
     }
+
+    public function firstAssignment()
+    {
+        return $this->hasOne(
+            AssetAssignment::class
+        )->oldestOfMany();
+    }
 }

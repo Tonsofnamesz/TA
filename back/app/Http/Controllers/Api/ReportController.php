@@ -7,17 +7,12 @@ use App\Models\Asset;
 
 class ReportController extends Controller
 {
-    /**
-     * Report Table 1
-     * Serial Number
-     * Warranty Start
-     * Warranty End
-     * Latest User
-     */
+
     public function warrantyReport()
     {
         return Asset::with([
-            'latestAssignment'
+            'latestAssignment',
+            'deviceType'
         ])
             ->select(
                 'id',
@@ -26,8 +21,11 @@ class ReportController extends Controller
                 'model',
                 'ship_date',
                 'warranty_start',
-                'warranty_end'
+                'warranty_end',
+                'device_type_id',
+                'status'
             )
+
             ->get()
             ->sortByDesc(function ($asset) {
                 return $asset->latestAssignment?->created_at;
@@ -58,6 +56,11 @@ class ReportController extends Controller
                     'latest_user' =>
                     $asset->latestAssignment?->assigned_to ?? '-',
 
+                    'device_type' =>
+                    $asset->deviceType?->name ?? '-',
+
+                    'status' => $asset->status,
+
                     'device_age' =>
                     $asset->ship_date
                         ? round(
@@ -70,19 +73,12 @@ class ReportController extends Controller
             });
     }
 
-    /**
-     * Report Table 2
-     * Serial Number
-     * Activation Date
-     * Value
-     * Invoice
-     * CAPEX
-     * Latest User
-     */
     public function assetReport()
     {
         return Asset::with([
-            'latestAssignment'
+            'latestAssignment',
+            'firstAssignment',
+            'deviceType'
         ])
             ->select(
                 'id',
@@ -92,7 +88,8 @@ class ReportController extends Controller
                 'ship_date',
                 'purchase_price',
                 'invoice_number',
-                'capex_number'
+                'capex_number',
+                'device_type_id'
             )
             ->get()
             ->sortByDesc(function ($asset) {
@@ -117,7 +114,12 @@ class ReportController extends Controller
                     $asset->model,
 
                     'activation_date' =>
-                    $asset->ship_date,
+                    $asset->firstAssignment?->start_date,
+
+                    'activation_status' =>
+                    $asset->firstAssignment
+                        ? 'Activated'
+                        : 'Not Activated',
 
                     'value' =>
                     $asset->purchase_price,
@@ -127,6 +129,9 @@ class ReportController extends Controller
 
                     'capex' =>
                     $asset->capex_number,
+
+                    'device_type' =>
+                    $asset->deviceType?->name ?? '-',
 
                     'latest_user' =>
                     $asset->latestAssignment?->assigned_to ?? '-',

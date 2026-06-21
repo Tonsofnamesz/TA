@@ -16,6 +16,16 @@ export default function ReportsPage() {
         useState(false);
 
     const [
+        computerStatusFilter,
+        setComputerStatusFilter
+    ] = useState("all");
+
+    const [
+        activationFilter,
+        setActivationFilter
+    ] = useState("all");
+
+    const [
         warrantyReport,
         setWarrantyReport
     ] = useState<any[]>([]);
@@ -67,6 +77,46 @@ export default function ReportsPage() {
 
     }, []);
 
+    const filteredWarrantyReport =
+        warrantyReport.filter((asset) => {
+
+            if (
+                computerStatusFilter === "all"
+            ) {
+                return true;
+            }
+
+            return (
+                asset.status ===
+                computerStatusFilter
+            );
+        });
+
+    const filteredAssetReport =
+        assetReport.filter((asset) => {
+
+            if (
+                activationFilter === "all"
+            ) {
+                return true;
+            }
+
+            if (
+                activationFilter ===
+                "activated"
+            ) {
+                return (
+                    asset.activation_status ===
+                    "Activated"
+                );
+            }
+
+            return (
+                asset.activation_status ===
+                "Not Activated"
+            );
+        });
+
     if (loading) {
         return (
             <AppLayout>
@@ -78,7 +128,7 @@ export default function ReportsPage() {
     const exportComputerList = () => {
 
         const exportData =
-            warrantyReport.map(
+            filteredWarrantyReport.map(
                 (asset) => ({
                     "Serial Number":
                         asset.serial_number,
@@ -91,6 +141,9 @@ export default function ReportsPage() {
 
                     Model:
                         asset.model,
+
+                    "Device Type":
+                        asset.device_type,
 
                     "Latest User":
                         asset.latest_user,
@@ -129,7 +182,7 @@ export default function ReportsPage() {
     const exportFixedAssets = () => {
 
         const exportData =
-            assetReport.map(
+            filteredAssetReport.map(
                 (asset) => ({
                     "Serial Number":
                         asset.serial_number,
@@ -142,6 +195,9 @@ export default function ReportsPage() {
 
                     Model:
                         asset.model,
+
+                    "Device Type":
+                        asset.device_type,
 
                     "Latest User":
                         asset.latest_user,
@@ -190,44 +246,91 @@ export default function ReportsPage() {
             {/* Warranty Report */}
             <div className="bg-white rounded shadow mb-8 overflow-x-auto">
 
-                <div className="p-4 border-b flex justify-between items-center">
-                    <button
-                        onClick={exportComputerList}
-                        className="
-            bg-green-600
-            text-white
-            px-4
-            py-2
-            rounded
-            hover:bg-green-700
-            ml-2
-            "
-                    >
-                        Export Excel
-                    </button>
-                    <h2 className="text-lg font-semibold">
-                        Computer List
-                    </h2>
+                <div className="p-4 border-b">
 
-                    <button
-                        onClick={() =>
-                            setShowComputerList(
-                                !showComputerList
-                            )
-                        }
-                        className="
-            bg-blue-600
-            text-white
-            px-4
-            py-2
-            rounded
-            hover:bg-blue-700
-        "
-                    >
-                        {showComputerList
-                            ? "Hide Table"
-                            : "Show Table"}
-                    </button>
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-lg font-semibold">
+                            Computer List
+                        </h2>
+
+                        <button
+                            onClick={() =>
+                                setShowComputerList(
+                                    !showComputerList
+                                )
+                            }
+                            className="
+                bg-blue-600
+                text-white
+                px-4
+                py-2
+                rounded-lg
+                hover:bg-blue-700
+                transition
+            "
+                        >
+                            {showComputerList
+                                ? "Hide Table"
+                                : "Show Table"}
+                        </button>
+                    </div>
+
+                    <div className="flex flex-wrap gap-3 items-center">
+                        <select
+                            value={computerStatusFilter}
+                            onChange={(e) =>
+                                setComputerStatusFilter(
+                                    e.target.value
+                                )
+                            }
+                            className="
+                border
+                rounded-lg
+                px-3
+                py-2
+                bg-white
+            "
+                        >
+                            <option value="all">
+                                All Status
+                            </option>
+
+                            <option value="available">
+                                Available
+                            </option>
+
+                            <option value="assigned">
+                                Assigned
+                            </option>
+
+                            <option value="broken">
+                                Broken
+                            </option>
+
+                            <option value="lost">
+                                Lost
+                            </option>
+
+                            <option value="disposed">
+                                Disposed
+                            </option>
+                        </select>
+
+                        <button
+                            onClick={exportComputerList}
+                            className="
+                bg-green-600
+                text-white
+                px-4
+                py-2
+                rounded-lg
+                hover:bg-green-700
+                transition
+            "
+                        >
+                            Export Excel
+                        </button>
+                    </div>
 
                 </div>
 
@@ -238,6 +341,10 @@ export default function ReportsPage() {
                             <tr>
                                 <th className="p-3 text-left">
                                     Serial Number
+                                </th>
+
+                                <th className="p-3 text-left">
+                                    Latest User
                                 </th>
 
                                 <th className="p-3 text-left">
@@ -253,11 +360,7 @@ export default function ReportsPage() {
                                 </th>
 
                                 <th className="p-3 text-left">
-                                    Latest User
-                                </th>
-
-                                <th className="p-3 text-left">
-                                    Device Age
+                                    Device Type
                                 </th>
 
                                 <th className="p-3 text-left">
@@ -267,11 +370,15 @@ export default function ReportsPage() {
                                 <th className="p-3 text-left">
                                     Warranty End
                                 </th>
+
+                                <th className="p-3 text-left">
+                                    Device Age
+                                </th>
                             </tr>
                         </thead>
 
                         <tbody>
-                            {warrantyReport.length === 0 ? (
+                            {filteredWarrantyReport.length === 0 ? (
                                 <tr>
                                     <td
                                         colSpan={4}
@@ -281,13 +388,17 @@ export default function ReportsPage() {
                                     </td>
                                 </tr>
                             ) : (
-                                warrantyReport.map((asset) => (
+                                filteredWarrantyReport.map((asset) => (
                                     <tr
                                         key={asset.id}
                                         className="border-t"
                                     >
                                         <td className="p-3">
                                             {asset.serial_number}
+                                        </td>
+
+                                        <td className="p-3">
+                                            {asset.latest_user ?? "-"}
                                         </td>
 
                                         <td className="p-3">
@@ -303,13 +414,7 @@ export default function ReportsPage() {
                                         </td>
 
                                         <td className="p-3">
-                                            {asset.latest_user ?? "-"}
-                                        </td>
-
-                                        <td className="p-3">
-                                            {asset.device_age
-                                                ? `${asset.device_age} years`
-                                                : "-"}
+                                            {asset.device_type ?? "-"}
                                         </td>
 
                                         <td className="p-3">
@@ -318,6 +423,12 @@ export default function ReportsPage() {
 
                                         <td className="p-3">
                                             {asset.warranty_end ?? "-"}
+                                        </td>
+
+                                        <td className="p-3">
+                                            {asset.device_age
+                                                ? `${asset.device_age} years`
+                                                : "-"}
                                         </td>
                                     </tr>
                                 ))
@@ -330,44 +441,79 @@ export default function ReportsPage() {
             {/* Asset Report */}
             <div className="bg-white rounded shadow overflow-x-auto">
 
-                <div className="p-4 border-b flex justify-between items-center">
-                    <button
-                        onClick={exportFixedAssets}
-                        className="
-            bg-green-600
-            text-white
-            px-4
-            py-2
-            rounded
-            hover:bg-green-700
-            ml-2
-            "
-                    >
-                        Export Excel
-                    </button>
-                    <h2 className="text-lg font-semibold">
-                        Fixed Assets Activation
-                    </h2>
+                <div className="p-4 border-b">
 
-                    <button
-                        onClick={() =>
-                            setShowFixedAssets(
-                                !showFixedAssets
-                            )
-                        }
-                        className="
-            bg-blue-600
-            text-white
-            px-4
-            py-2
-            rounded
-            hover:bg-blue-700
-        "
-                    >
-                        {showFixedAssets
-                            ? "Hide Table"
-                            : "Show Table"}
-                    </button>
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-lg font-semibold">
+                            Fixed Assets Activation
+                        </h2>
+
+                        <button
+                            onClick={() =>
+                                setShowFixedAssets(
+                                    !showFixedAssets
+                                )
+                            }
+                            className="
+                bg-blue-600
+                text-white
+                px-4
+                py-2
+                rounded-lg
+                hover:bg-blue-700
+                transition
+            "
+                        >
+                            {showFixedAssets
+                                ? "Hide Table"
+                                : "Show Table"}
+                        </button>
+                    </div>
+
+                    <div className="flex flex-wrap gap-3 items-center">
+                        <select
+                            value={activationFilter}
+                            onChange={(e) =>
+                                setActivationFilter(
+                                    e.target.value
+                                )
+                            }
+                            className="
+                border
+                rounded-lg
+                px-3
+                py-2
+                bg-white
+            "
+                        >
+                            <option value="all">
+                                All Assets
+                            </option>
+
+                            <option value="activated">
+                                Activated
+                            </option>
+
+                            <option value="not_activated">
+                                Not Activated
+                            </option>
+                        </select>
+
+                        <button
+                            onClick={exportFixedAssets}
+                            className="
+                bg-green-600
+                text-white
+                px-4
+                py-2
+                rounded-lg
+                hover:bg-green-700
+                transition
+            "
+                        >
+                            Export Excel
+                        </button>
+                    </div>
 
                 </div>
 
@@ -385,6 +531,22 @@ export default function ReportsPage() {
                                 </th>
 
                                 <th className="p-3 text-left">
+                                    Computer Name
+                                </th>
+
+                                <th className="p-3 text-left">
+                                    Manufacturer
+                                </th>
+
+                                <th className="p-3 text-left">
+                                    Model
+                                </th>
+
+                                <th className="p-3 text-left">
+                                    Device Type
+                                </th>
+
+                                <th className="p-3 text-left">
                                     Activation Date
                                 </th>
 
@@ -399,25 +561,12 @@ export default function ReportsPage() {
                                 <th className="p-3 text-left">
                                     CAPEX
                                 </th>
-
-                                <th className="p-3 text-left">
-                                    Computer Name
-                                </th>
-
-                                <th className="p-3 text-left">
-                                    Manufacturer
-                                </th>
-
-                                <th className="p-3 text-left">
-                                    Model
-                                </th>
-
                             </tr>
                         </thead>
 
                         <tbody>
 
-                            {assetReport.length === 0 ? (
+                            {filteredAssetReport.length === 0 ? (
                                 <tr>
                                     <td
                                         colSpan={6}
@@ -427,7 +576,7 @@ export default function ReportsPage() {
                                     </td>
                                 </tr>
                             ) : (
-                                assetReport.map((asset) => (
+                                filteredAssetReport.map((asset) => (
                                     <tr
                                         key={asset.id}
                                         className="border-t"
@@ -438,6 +587,21 @@ export default function ReportsPage() {
 
                                         <td className="p-3">
                                             {asset.latest_user ?? "-"}
+                                        </td>
+
+                                        <td className="p-3">
+                                            {asset.computer_name ?? "-"}
+                                        </td>
+                                        <td className="p-3">
+                                            {asset.manufacturer ?? "-"}
+                                        </td>
+
+                                        <td className="p-3">
+                                            {asset.model ?? "-"}
+                                        </td>
+
+                                        <td className="p-3">
+                                            {asset.device_type ?? "-"}
                                         </td>
 
                                         <td className="p-3">
@@ -454,18 +618,6 @@ export default function ReportsPage() {
 
                                         <td className="p-3">
                                             {asset.capex ?? "-"}
-                                        </td>
-
-                                        <td className="p-3">
-                                            {asset.computer_name ?? "-"}
-                                        </td>
-
-                                        <td className="p-3">
-                                            {asset.manufacturer ?? "-"}
-                                        </td>
-
-                                        <td className="p-3">
-                                            {asset.model ?? "-"}
                                         </td>
                                     </tr>
                                 ))
