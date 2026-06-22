@@ -245,7 +245,7 @@ export default function AssetsPage() {
                                     <th className="p-3 text-left">Assigned To</th>
                                     <th className="p-3 text-left">Invoice</th>
                                     <th className="p-3 text-left">Purchase Price</th>
-                                    <th className="p-3 text-left">CAPEX</th>
+                                    <th className="p-3 text-left">Budget No.</th>
                                 </>
                             )}
 

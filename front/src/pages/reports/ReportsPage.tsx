@@ -559,7 +559,7 @@ export default function ReportsPage() {
                                 </th>
 
                                 <th className="p-3 text-left">
-                                    CAPEX
+                                    Budget No.
                                 </th>
                             </tr>
                         </thead>
