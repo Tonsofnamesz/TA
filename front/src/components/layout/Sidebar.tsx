@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import { Link, useLocation } from "react-router-dom";
+import { useAuthStore } from "../../stores/authStore";
 
 export default function Sidebar() {
     const location = useLocation();
@@ -22,24 +23,17 @@ export default function Sidebar() {
         py-2
         rounded-lg
         transition
-        ${
-            location.pathname === path
-                ? "bg-slate-700 text-white"
-                : "text-slate-300 hover:bg-slate-800 hover:text-white"
+        ${location.pathname === path
+            ? "bg-slate-700 text-white"
+            : "text-slate-300 hover:bg-slate-800 hover:text-white"
         }
     `;
 
+    const user = useAuthStore((state) => state.user);
+    const isAdmin = user?.roles?.some((role) => role.name === "admin");
+
     return (
-        <aside
-            className="
-                w-64
-                bg-slate-900
-                text-white
-                min-h-screen
-                p-5
-                shadow-xl
-            "
-        >
+        <aside className="w-64 bg-slate-900 text-white min-h-screen p-5 shadow-xl">
             <h1 className="text-2xl font-bold mb-8">
                 Asset Manager
             </h1>
@@ -53,61 +47,69 @@ export default function Sidebar() {
                     Dashboard
                 </Link>
 
+                {isAdmin && (
+                    <>
+                        <div className="mt-6 mb-2 text-xs uppercase tracking-wider text-slate-400">
+                            Master Data
+                        </div>
+
+                        <Link
+                            to="/sites"
+                            className={linkClass("/sites")}
+                        >
+                            <Building2 size={18} />
+                            Sites
+                        </Link>
+
+                        <Link
+                            to="/departments"
+                            className={linkClass("/departments")}
+                        >
+                            <Users size={18} />
+                            Departments
+                        </Link>
+
+                        <Link
+                            to="/device-types"
+                            className={linkClass("/device-types")}
+                        >
+                            <Laptop size={18} />
+                            Device Types
+                        </Link>
+
+                        <Link
+                            to="/users"
+                            className={linkClass("/users")}
+                        >
+                            <Users size={18} />
+                            Users
+                        </Link>
+
+                        <div className="mt-6 mb-2 text-xs uppercase tracking-wider text-slate-400">
+                            Asset Management
+                        </div>
+
+                        <Link
+                            to="/assets"
+                            className={linkClass("/assets")}
+                        >
+                            <Laptop size={18} />
+                            Assets
+                        </Link>
+
+                        <Link
+                            to="/assignments"
+                            className={linkClass("/assignments")}
+                        >
+                            <ClipboardList size={18} />
+                            Assignments
+                        </Link>
+                    </>
+                )}
+
                 <div className="mt-6 mb-2 text-xs uppercase tracking-wider text-slate-400">
-                    Master Data
+                    Reports
                 </div>
-
-                <Link
-                    to="/sites"
-                    className={linkClass("/sites")}
-                >
-                    <Building2 size={18} />
-                    Sites
-                </Link>
-
-                <Link
-                    to="/departments"
-                    className={linkClass("/departments")}
-                >
-                    <Users size={18} />
-                    Departments
-                </Link>
-
-                <Link
-                    to="/suppliers"
-                    className={linkClass("/suppliers")}
-                >
-                    <Truck size={18} />
-                    Suppliers
-                </Link>
-
-                <Link
-                    to="/device-types"
-                    className={linkClass("/device-types")}
-                >
-                    <Laptop size={18} />
-                    Device Types
-                </Link>
-
-                <div className="mt-6 mb-2 text-xs uppercase tracking-wider text-slate-400">
-                    Asset Management
-                </div>
-
-                <Link
-                    to="/assets"
-                    className={linkClass("/assets")}
-                >
-                    <Laptop size={18} />
-                    Assets
-                </Link>
-
-                <Link
-                    to="/assignments"
-                    className={linkClass("/assignments")}
-                >
-                    <ClipboardList size={18} />
-                    Assignments
-                </Link>
 
                 <Link
                     to="/reports"

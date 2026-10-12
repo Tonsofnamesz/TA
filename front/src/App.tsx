@@ -12,6 +12,10 @@ import AssignmentCreate from "./pages/assignments/AssignmentCreate";
 import AssignmentDetails from "./pages/assignments/AssignmentDetails";
 import AssignmentEdit from "./pages/assignments/AssignmentEdit";
 import ReportsPage from "./pages/reports/ReportsPage";
+import SiteList from "./pages/sites/SiteList";
+import DepartmentList from "./pages/departments/DepartmentList";
+import DeviceTypeList from "./pages/deviceTypes/DeviceTypeList";
+import UserList from "./pages/users/UserList";
 
 function App() {
   return (
@@ -20,6 +24,15 @@ function App() {
         <Route
           path="/"
           element={<Login />}
+        />
+
+        <Route
+          path="/users"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <UserList />
+            </ProtectedRoute>
+          }
         />
 
         <Route
@@ -99,6 +112,33 @@ function App() {
           element={
             <ProtectedRoute>
               <AssignmentEdit />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/sites"
+          element={
+            <ProtectedRoute>
+              <SiteList />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/departments"
+          element={
+            <ProtectedRoute>
+              <DepartmentList />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/device-types"
+          element={
+            <ProtectedRoute>
+              <DeviceTypeList />
             </ProtectedRoute>
           }
         />
