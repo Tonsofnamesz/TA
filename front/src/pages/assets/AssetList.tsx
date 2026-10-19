@@ -214,7 +214,6 @@ export default function AssetsPage() {
 
             <div className="bg-white rounded shadow overflow-x-auto">
 
-                ```
                 <div className="flex justify-between items-center p-4 border-b">
                     <p className="text-gray-600">
                         Showing {filteredAssets.length} assets
@@ -363,7 +362,6 @@ export default function AssetsPage() {
                             ))}
                     </tbody>
                 </table>
-                ```
 
             </div>
 
