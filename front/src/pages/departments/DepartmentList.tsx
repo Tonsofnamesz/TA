@@ -170,7 +170,6 @@ function DepartmentList() {
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                placeholder="Enter department name"
                                 maxLength={255}
                                 required
                                 className="w-full border rounded px-3 py-2"

@@ -211,7 +211,6 @@ export default function SiteList() {
                             value={form.site_code}
                             onChange={handleChange}
                             className="border rounded p-2 w-full"
-                            placeholder="JKT-001"
                             maxLength={255}
                             required
                         />
@@ -230,7 +229,6 @@ export default function SiteList() {
                             value={form.site_name}
                             onChange={handleChange}
                             className="border rounded p-2 w-full"
-                            placeholder="Jakarta Office"
                             maxLength={255}
                             required
                         />
@@ -249,7 +247,6 @@ export default function SiteList() {
                             value={form.country ?? ""}
                             onChange={handleChange}
                             className="border rounded p-2 w-full"
-                            placeholder="Indonesia"
                             maxLength={255}
                         />
                     </div>

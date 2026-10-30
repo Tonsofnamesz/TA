@@ -172,7 +172,6 @@ export default function DeviceTypeList() {
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                placeholder="e.g. Laptop, Desktop, Network Switch"
                                 maxLength={255}
                                 required
                                 className="w-full border rounded px-3 py-2"
