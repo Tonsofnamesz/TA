@@ -3,16 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Handle an incoming authentication request.
-     */
     public function store(Request $request)
     {
         $credentials = $request->validate([
@@ -20,13 +16,16 @@ class AuthenticatedSessionController extends Controller
             'password' => ['required'],
         ]);
 
-        if (! Auth::attempt($credentials)) {
+        $user = User::where(
+            'email',
+            strtolower(trim($credentials['email']))
+        )->first();
+
+        if (! $user || ! Hash::check($credentials['password'], $user->password)) {
             return response()->json([
-                'message' => 'Invalid credentials'
+                'message' => 'Invalid credentials',
             ], 401);
         }
-
-        $user = Auth::user();
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -36,15 +35,12 @@ class AuthenticatedSessionController extends Controller
         ]);
     }
 
-    /**
-     * Destroy an authenticated session.
-     */
     public function destroy(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
-            'message' => 'Logged out successfully'
+            'message' => 'Logged out successfully',
         ]);
     }
 }
