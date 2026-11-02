@@ -2,7 +2,6 @@ import {
     LayoutDashboard,
     Building2,
     Users,
-    Truck,
     Laptop,
     ClipboardList,
     FileBarChart,
