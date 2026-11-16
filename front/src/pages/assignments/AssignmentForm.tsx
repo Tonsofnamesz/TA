@@ -142,8 +142,6 @@ export default function AssignmentForm({
                     ? Number(form.department_id)
                     : null,
 
-            end_date:
-                form.end_date || null,
         });
     };
 
@@ -199,61 +197,6 @@ export default function AssignmentForm({
                             className="border rounded p-2 w-full"
                             placeholder="Employee Name"
                         />
-                    </div>
-
-                    {/* Site + Department */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-sm font-medium mb-1">
-                                Site
-                            </label>
-
-                            <select
-                                name="site_id"
-                                value={form.site_id}
-                                onChange={handleChange}
-                                className="border rounded p-2 w-full"
-                            >
-                                <option value="">
-                                    Select Site
-                                </option>
-
-                                {sites.map((site) => (
-                                    <option
-                                        key={site.id}
-                                        value={site.id}
-                                    >
-                                        {site.site_name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">
-                                Department
-                            </label>
-
-                            <select
-                                name="department_id"
-                                value={form.department_id}
-                                onChange={handleChange}
-                                className="border rounded p-2 w-full"
-                            >
-                                <option value="">
-                                    Select Department
-                                </option>
-
-                                {departments.map((department) => (
-                                    <option
-                                        key={department.id}
-                                        value={department.id}
-                                    >
-                                        {department.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
                     </div>
 
                     {/* Computer Name + FQDN */}
@@ -323,22 +266,63 @@ export default function AssignmentForm({
                 />
             </div>
 
-            {/* End Date ONLY IN EDIT */}
-            {isEdit && (
+
+            {/* Site + Department - create and edit */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label className="block text-sm font-medium mb-1">
-                        End Date
+                        Site
                     </label>
 
-                    <input
-                        type="date"
-                        name="end_date"
-                        value={form.end_date}
+                    <select
+                        name="site_id"
+                        value={form.site_id}
                         onChange={handleChange}
                         className="border rounded p-2 w-full"
-                    />
+                    >
+                        <option value="">
+                            Select Site
+                        </option>
+
+                        {sites.map((site) => (
+                            <option
+                                key={site.id}
+                                value={site.id}
+                            >
+                                {site.site_name}
+                            </option>
+                        ))}
+                    </select>
                 </div>
-            )}
+
+                <div>
+                    <label className="block text-sm font-medium mb-1">
+                        Department
+                    </label>
+
+                    <select
+                        name="department_id"
+                        value={form.department_id}
+                        onChange={handleChange}
+                        className="border rounded p-2 w-full"
+                    >
+                        <option value="">
+                            Select Department
+                        </option>
+
+                        {departments.map((department) => (
+                            <option
+                                key={department.id}
+                                value={department.id}
+                            >
+                                {department.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+
+            {/* End Date ONLY IN EDIT */}
 
             <button
                 type="submit"
