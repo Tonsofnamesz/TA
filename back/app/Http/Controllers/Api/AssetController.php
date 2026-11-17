@@ -16,7 +16,7 @@ class AssetController extends Controller
         return Asset::with([
             'deviceType',
             'supplier',
-            'assignments'
+            'assignments.site'
         ])->get();
     }
 
@@ -88,7 +88,7 @@ class AssetController extends Controller
         return $asset->load([
             'deviceType',
             'supplier',
-            'assignments'
+            'assignments.site'
         ]);
     }
 

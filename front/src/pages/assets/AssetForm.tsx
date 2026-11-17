@@ -112,9 +112,13 @@ export default function AssetForm({
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => {
+        const { name, value } = e.target;
+
         setForm({
             ...form,
-            [e.target.name]: e.target.value,
+            [name]: name === "serial_number"
+                ? value.toUpperCase()
+                : value,
         });
     };
 

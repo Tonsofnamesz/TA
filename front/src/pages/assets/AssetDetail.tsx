@@ -34,7 +34,18 @@ type Asset = {
     supplier_name: string;
   };
 
-  assignments?: any[];
+  assignments?: {
+    id: number;
+    computer_name: string | null;
+    assigned_to: string | null;
+    site_id: number | null;
+    start_date: string;
+    end_date: string | null;
+    site?: {
+      id: number;
+      site_name: string;
+    } | null;
+  }[];
 };
 
 export default function AssetDetail() {
@@ -49,6 +60,7 @@ export default function AssetDetail() {
       try {
         const res = await api.get(`/assets/${id}`);
         setAsset(res.data.data ?? res.data);
+        console.log("Asset API response:", res.data);
       } catch (error) {
         console.error(error);
       } finally {
@@ -79,8 +91,8 @@ export default function AssetDetail() {
     asset.warranty_status === "expired"
       ? "bg-red-100 text-red-700"
       : asset.warranty_status === "expiring"
-      ? "bg-yellow-100 text-yellow-700"
-      : "bg-green-100 text-green-700";
+        ? "bg-yellow-100 text-yellow-700"
+        : "bg-green-100 text-green-700";
 
   return (
     <AppLayout>
@@ -204,20 +216,32 @@ export default function AssetDetail() {
           </h2>
 
           {asset.assignments?.length ? (
-            <ul className="text-sm space-y-2">
-              {asset.assignments.map((a: any) => (
-                <li key={a.id} className="border-b pb-2">
+            <ul className="text-sm space-y-3">
+              {asset.assignments.map((a) => (
+                <li key={a.id} className="border-b pb-3">
                   <p>
                     <span className="text-gray-500">Computer:</span>{" "}
                     {a.computer_name ?? "-"}
                   </p>
+
+                  <p>
+                    <span className="text-gray-500">Assigned To:</span>{" "}
+                    {a.assigned_to ?? "-"}
+                  </p>
+
                   <p>
                     <span className="text-gray-500">Site:</span>{" "}
-                    {a.site_id ?? "-"}
+                    {a.site?.site_name ?? "-"}
                   </p>
+
                   <p>
-                    <span className="text-gray-500">Start:</span>{" "}
-                    {a.start_date}
+                    <span className="text-gray-500">Start Date:</span>{" "}
+                    {a.start_date ?? "-"}
+                  </p>
+
+                  <p>
+                    <span className="text-gray-500">End Date:</span>{" "}
+                    {a.end_date ?? "-"}
                   </p>
                 </li>
               ))}

@@ -73,9 +73,57 @@ export default function AssignmentEdit() {
 
     return (
         <AppLayout>
-            <h1 className="text-2xl font-bold mb-6">
-                Edit Assignment
-            </h1>
+            <div className="flex items-center gap-3 mb-6">
+
+                <button
+                    type="button"
+                    onClick={() => navigate("/assignments")}
+                    className="
+            px-4 py-2
+            border border-gray-300
+            rounded-lg
+            text-gray-700
+            bg-blue-600
+            hover:bg-blue-700
+            text-white
+            transition
+        "
+                >
+                    ← Back
+                </button>
+                <h1 className="text-2xl font-bold">
+                    Edit Assignment
+                </h1>
+            </div>
+
+            {/* Assignment Information */}
+            <div className="bg-white p-5 rounded-lg shadow mb-6">
+                <h2 className="text-lg font-semibold mb-4">
+                    Assignment Information
+                </h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <p className="text-sm text-gray-500">
+                            Asset Serial Number
+                        </p>
+
+                        <p className="font-medium">
+                            {assignment?.asset?.serial_number ?? "-"}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p className="text-sm text-gray-500">
+                            Assigned User
+                        </p>
+
+                        <p className="font-medium">
+                            {assignment?.assigned_to || "-"}
+                        </p>
+                    </div>
+                </div>
+            </div>
 
             <AssignmentForm
                 initialData={assignment}

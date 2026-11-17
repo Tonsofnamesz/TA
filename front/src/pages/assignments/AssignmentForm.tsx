@@ -200,7 +200,7 @@ export default function AssignmentForm({
                     </div>
 
                     {/* Computer Name + FQDN */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4">
                         <div>
                             <label className="block text-sm font-medium mb-1">
                                 Computer Name
@@ -213,21 +213,6 @@ export default function AssignmentForm({
                                 onChange={handleChange}
                                 className="border rounded p-2 w-full"
                                 placeholder="FIN-PC-001"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">
-                                FQDN
-                            </label>
-
-                            <input
-                                type="text"
-                                name="fqdn"
-                                value={form.fqdn}
-                                onChange={handleChange}
-                                className="border rounded p-2 w-full"
-                                placeholder="fin-pc-001.company.local"
                             />
                         </div>
                     </div>
